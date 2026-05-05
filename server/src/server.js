@@ -42,16 +42,15 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  const clientDist = path.join(process.cwd(), "client/dist");
+  const clientDist = path.join(__dirname, "../../client/dist");
 
   app.use(express.static(clientDist));
 
-  app.get("*", (req, res) => {
-    if (!req.path.startsWith("/api")) {
-      res.sendFile(path.join(clientDist, "index.html"));
-    }
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(clientDist, "index.html"));
   });
 }
+
 
 app.use(errorHandler);
 
