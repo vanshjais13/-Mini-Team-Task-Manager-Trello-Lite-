@@ -20,8 +20,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(
+ 
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "https://mini-team-task-manager-trello-lite-env.up.railway.app",
     credentials: true
   })
 );
@@ -39,10 +40,13 @@ app.use("/api/dashboard", dashboardRoutes);
 if (process.env.NODE_ENV === "production") {
   const clientDist = path.join(__dirname, "../../client/dist");
   app.use(express.static(clientDist));
-  app.get("*", (_req, res) => {
+
+
+app.get("*", (req, res) => {
+  if (!req.path.startsWith("/api")) {
     res.sendFile(path.join(clientDist, "index.html"));
-  });
-}
+  }
+});
 
 app.use(errorHandler);
 console.log("ENV CHECK:", process.env.MONGO_URI);
