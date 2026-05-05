@@ -42,8 +42,7 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  const clientDist = path.join(process.cwd(), "client/dist");
-
+const clientDist = path.join(process.cwd(), "../client/dist");
   app.use(express.static(clientDist));
 
   app.get("*", (req, res) => {
