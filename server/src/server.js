@@ -10,7 +10,9 @@ import projectRoutes from "./routes/project.routes.js";
 import taskRoutes from "./routes/task.routes.js";
 import { errorHandler } from "./middleware/error.js";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -43,6 +45,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(errorHandler);
+console.log("ENV CHECK:", process.env.MONGO_URI);
 
 mongoose
   .connect(process.env.MONGO_URI)
