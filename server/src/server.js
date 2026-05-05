@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
+
 import authRoutes from "./routes/auth.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import projectRoutes from "./routes/project.routes.js";
@@ -16,16 +17,19 @@ if (process.env.NODE_ENV !== "production") {
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(
- 
   cors({
-    origin: process.env.CLIENT_URL || "https://mini-team-task-manager-trello-lite-env.up.railway.app",
-    credentials: true
+    origin:
+      process.env.CLIENT_URL ||
+      "https://mini-team-task-manager-trello-lite-env.up.railway.app",
+    credentials: true,
   })
 );
+
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
@@ -38,17 +42,19 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  const clientDist = path.join(__dirname, "../../client/dist");
+  const clientDist = path.join(process.cwd(), "client/dist");
+
   app.use(express.static(clientDist));
 
-
-app.get("*", (req, res) => {
-  if (!req.path.startsWith("/api")) {
-    res.sendFile(path.join(clientDist, "index.html"));
-  }
-});
+  app.get("*", (req, res) => {
+    if (!req.path.startsWith("/api")) {
+      res.sendFile(path.join(clientDist, "index.html"));
+    }
+  });
+}
 
 app.use(errorHandler);
+
 console.log("ENV CHECK:", process.env.MONGO_URI);
 
 mongoose
